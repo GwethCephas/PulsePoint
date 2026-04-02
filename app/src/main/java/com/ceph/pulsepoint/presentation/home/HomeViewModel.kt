@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.ceph.pulsepoint.domain.model.Article
 import com.ceph.pulsepoint.domain.repository.PulseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,18 +21,32 @@ class HomeViewModel(
     private val _articles = MutableStateFlow<PagingData<Article>>(PagingData.empty())
     val articles = _articles.asStateFlow()
 
+    private val _categoryNews = MutableStateFlow<PagingData<Article>>(PagingData.empty())
+    val categoryNews = _categoryNews.asStateFlow()
+
     init {
 
         getNewsHeadlines()
     }
 
-    private fun getNewsHeadlines() {
+    fun getNewsHeadlines() {
         viewModelScope.launch {
             repository.getNewsHeadlines().collect {
                 _articles.value = it
             }
+
         }
     }
+
+    fun getNewsByCategory(category: String) {
+        viewModelScope.launch {
+            repository.getNewsByCategory(category)
+                .collect {
+                    _categoryNews.value = it
+                }
+        }
+    }
+
 
     val favoriteArticlesUrls: StateFlow<List<String>> = repository.getFavoriteArticlesUrls()
         .stateIn(

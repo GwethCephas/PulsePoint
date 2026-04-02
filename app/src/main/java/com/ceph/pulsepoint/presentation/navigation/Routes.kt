@@ -4,10 +4,12 @@ package com.ceph.pulsepoint.presentation.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Routes(
@@ -40,13 +42,25 @@ sealed class Routes(
     data object Search :Routes(
         title = "Search",
         route = "search",
-        selectedIcon = Icons.Filled.Search,
+        selectedIcon = Icons.Rounded.Search,
         unselectedIcon = Icons.Outlined.Search
     )
+    data object Notification: Routes(
+        title = "Notification",
+        route = "notification",
+        selectedIcon =Icons.Default.Notifications ,
+        unselectedIcon =Icons.Outlined.Notifications
+    )
 
-    data object Login:Routes(
-        title = "Login",
-        route = "login",
+    data object SignIn:Routes(
+        title = "SignIn",
+        route = "signIn",
+        selectedIcon = null,
+        unselectedIcon = null
+    )
+    data object SignUp:Routes(
+        title = "SignUp",
+        route = "signUp",
         selectedIcon = null,
         unselectedIcon = null
     )

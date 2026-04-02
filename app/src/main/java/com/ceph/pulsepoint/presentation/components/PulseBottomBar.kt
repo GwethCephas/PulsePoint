@@ -38,7 +38,7 @@ fun PulseBottomBar(
     val bottomBarList = listOf(
         Routes.Home,
         Routes.Favorite,
-        Routes.Search,
+        Routes.Notification,
         Routes.Profile
     )
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route

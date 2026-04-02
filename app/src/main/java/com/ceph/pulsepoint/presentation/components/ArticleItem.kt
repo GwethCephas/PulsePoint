@@ -3,7 +3,6 @@ package com.ceph.pulsepoint.presentation.components
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ceph.pulsepoint.R
 import com.ceph.pulsepoint.domain.model.Article
+import androidx.core.net.toUri
 
 
 @Composable
@@ -67,7 +68,7 @@ fun ArticleItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(2.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(5.dp))
             .clickable { isBottomSheetVisible = true },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp,
@@ -79,63 +80,63 @@ fun ArticleItem(
 
     ) {
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-
+            if (article.urlToImage == null) {
+                Box(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(100.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                if (article.urlToImage == null) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_image_not_supported_24),
-                            contentDescription = "image",
-                            modifier = Modifier.padding(5.dp),
-                            tint = Color.LightGray
-                        )
-                    }
-
-                } else {
-                    AsyncImage(
-                        model = article.urlToImage,
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_image_not_supported_24),
                         contentDescription = "image",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(180.dp)
+                        modifier = Modifier.padding(5.dp),
+                        tint = Color.LightGray
                     )
                 }
-            }
-            Text(
-                text = article.title,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(5.dp)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "By ${article.author}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    modifier = Modifier.padding(start = 5.dp)
 
+            } else {
+                AsyncImage(
+                    model = article.urlToImage,
+                    contentDescription = "image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(100.dp)
                 )
+            }
+
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+
+                Text(
+                    text = article.title,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+
                 FavoriteButton(
                     isFavorite = isFavorite,
-                    onClick = onFavoriteClick
+                    onClick = onFavoriteClick,
+                    modifier = Modifier.align(Alignment.End)
                 )
+
+
             }
-
         }
-
 
     }
 }
@@ -215,7 +216,7 @@ fun ArticleBottomSheet(
             var isClicked by remember { mutableStateOf(false) }
             TextButton(
                 onClick = {
-                    accessLink(context = context,uri = article.url)
+                    accessLink(context = context, uri = article.url)
                     isClicked = true
 
                 }
@@ -238,7 +239,7 @@ fun ArticleBottomSheet(
 fun accessLink(context: Context, uri: String) {
 
     if (uri.isNotEmpty()) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        val intent = Intent(Intent.ACTION_VIEW, uri.toUri())
         context.startActivity(intent)
     }
 

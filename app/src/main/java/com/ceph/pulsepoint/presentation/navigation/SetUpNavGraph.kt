@@ -11,10 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ceph.pulsepoint.presentation.authentication.GoogleAuthClient
 import com.ceph.pulsepoint.presentation.authentication.SignInScreen
+import com.ceph.pulsepoint.presentation.authentication.SignUpScreen
 import com.ceph.pulsepoint.presentation.favorite.FavoriteScreen
 import com.ceph.pulsepoint.presentation.favorite.FavoriteViewModel
 import com.ceph.pulsepoint.presentation.home.HomeScreen
 import com.ceph.pulsepoint.presentation.home.HomeViewModel
+import com.ceph.pulsepoint.presentation.notifications.NotificationScreen
 import com.ceph.pulsepoint.presentation.profile.ProfileScreen
 import com.ceph.pulsepoint.presentation.search.SearchScreen
 import com.ceph.pulsepoint.presentation.search.SearchViewModel
@@ -28,33 +30,36 @@ fun NavGraphSetUp(
     onQueryChange: (String) -> Unit,
     paddingValues: PaddingValues,
     googleAuthClient: GoogleAuthClient,
-    onSignInClick: () -> Unit,
     onSignOut: () -> Unit
-
 ) {
-    NavHost(navController = navController, startDestination = Routes.Login.route) {
+
+    val startDestination =
+        if (googleAuthClient.getCurrentUser() != null) Routes.Home.route else Routes.SignIn.route
+
+    NavHost(
+        navController = navController,
+        startDestination = startDestination
+    ) {
         composable(Routes.Home.route) {
+
             val homeViewModel = koinViewModel<HomeViewModel>()
-            val articles = homeViewModel.articles.collectAsLazyPagingItems()
-            val favoriteArticlesUrls by
-            homeViewModel.favoriteArticlesUrls.collectAsStateWithLifecycle()
+            val favoriteArticlesUrls by homeViewModel.favoriteArticlesUrls.collectAsStateWithLifecycle()
 
             HomeScreen(
-                articles = articles,
                 listState = listState,
                 onToggleStatus = { article ->
                     homeViewModel.toggleFavoriteStatus(article)
                 },
                 favoriteArticlesUrls = favoriteArticlesUrls,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                viewModel = homeViewModel
 
             )
         }
         composable(Routes.Favorite.route) {
             val favoriteViewModel = koinViewModel<FavoriteViewModel>()
             val favoriteNewsArticles = favoriteViewModel.favoriteArticles.collectAsLazyPagingItems()
-            val favArticlesUrls by
-            favoriteViewModel.favoriteArticlesUrls.collectAsStateWithLifecycle()
+            val favArticlesUrls by favoriteViewModel.favoriteArticlesUrls.collectAsStateWithLifecycle()
 
             FavoriteScreen(
                 listState = listState,
@@ -85,6 +90,9 @@ fun NavGraphSetUp(
 
             )
         }
+        composable(Routes.Notification.route) {
+            NotificationScreen()
+        }
         composable(Routes.Profile.route) {
             ProfileScreen(
                 userData = googleAuthClient.getCurrentUser(),
@@ -92,12 +100,17 @@ fun NavGraphSetUp(
 
             )
         }
-        composable(Routes.Login.route) {
-
+        composable(Routes.SignIn.route) {
             SignInScreen(
-                onSignInClick = onSignInClick
+                googleAuthClient = googleAuthClient,
+                navController = navController
             )
-
+        }
+        composable(Routes.SignUp.route) {
+            SignUpScreen(
+                navController = navController,
+                googleAuthClient = googleAuthClient
+            )
         }
     }
 }

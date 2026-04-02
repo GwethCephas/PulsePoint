@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrainsKotlinSerialization)
     alias(libs.plugins.gms.google.services)
     alias(libs.plugins.ksp)
@@ -38,30 +39,22 @@ android {
                 "proguard-rules.pro"
             )
         }
+
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -70,22 +63,27 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.ui.text.google.fonts)
-    implementation(libs.androidx.tools.core)
+
+    // Unit testing
     testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Android instrumentation testing
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Room
     implementation(libs.bundles.room)
-    annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
-    implementation(libs.ksp.gradlePlugin)
-    implementation(libs.room.paging)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
     // Coil
     implementation(libs.coil.compose)
@@ -93,30 +91,33 @@ dependencies {
     // Koin
     implementation(libs.bundles.koin)
 
+    //Material icons extended
+    implementation(libs.material.icons.extended)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofitMoshiConverter)
-    implementation(libs.moshi)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.converter.scalars)
-    implementation(libs.converter.gson)
-    implementation(libs.logging.interceptor)
+    //Google Fonts
+    implementation(libs.androidx.ui.text.google.fonts)
 
-    //Paging
-    implementation(libs.androidx.paging.compose)
-
-    //SplashScreen
+    // SplashScreen
     implementation(libs.androidx.core.splashscreen)
 
-    //Cloudy
-    implementation(libs.cloudy)
+    // Paging
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.room.paging)
 
-    //Firebase
+    // Firebase
     implementation(libs.play.services.auth)
     implementation(libs.firebase.auth)
+
+    // Credential Manager
+    implementation(libs.credential.manager)
+    implementation(libs.google.id.service)
+    implementation(libs.credential.service.auth)
+
+    //WorkManager
+    implementation(libs.work.manager)
+
 }
