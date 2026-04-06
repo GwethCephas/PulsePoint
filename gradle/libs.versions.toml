@@ -24,7 +24,6 @@ room = "2.8.4"
 ksp = "2.3.6"
 uiTextGoogleFonts = "1.10.6"
 coreSplashscreen = "1.2.0"
-materialIconsExtended = "1.7.8"
 coilCompose = "2.7.0"
 
 firebaseAuth = "23.2.1"
@@ -38,11 +37,14 @@ retrofit = "3.0.0"
 converterGson = "3.0.0"
 
 pagingVersion = "3.4.2"
+material = "1.13.0"
 
 workManager = "2.11.2"
 
+
 [libraries]
 
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 work-manager = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager"}
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingVersion" }
@@ -60,8 +62,6 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx", ver
 credential-manager = { group = "androidx.credentials", name = "credentials", version.ref = "credentialManager" }
 google-id-service = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleIdServices" }
 credential-service-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialServiceAuth" }
-
-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
@@ -96,10 +96,10 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
 
-
 [plugins]
 
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrainsKotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

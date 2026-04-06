@@ -1,28 +1,44 @@
 package com.ceph.pulsepoint.di
 
-
 import android.content.Context
 import androidx.room.Room
 import androidx.work.WorkerParameters
-import com.ceph.pulsepoint.data.local.ArticleDatabase
-import com.ceph.pulsepoint.data.remote.ApiService
-import com.ceph.pulsepoint.data.repository.PulseRepositoryImpl
-import com.ceph.pulsepoint.data.worker.RandomNewsWorker
-import com.ceph.pulsepoint.domain.repository.PulseRepository
-import com.ceph.pulsepoint.presentation.favorite.FavoriteViewModel
-import com.ceph.pulsepoint.presentation.home.HomeViewModel
-import com.ceph.pulsepoint.presentation.search.SearchViewModel
-import com.ceph.pulsepoint.utils.Constants
+import com.cephcoding.core.authentication.GoogleAuthClient
+import com.cephcoding.core.data.local.ArticleDatabase
+import com.cephcoding.core.data.remote.ApiService
+import com.cephcoding.core.data.repository.PulseRepositoryImpl
+import com.cephcoding.core.data.worker.RandomNewsWorker
+import com.cephcoding.core.domain.repository.PulseRepository
+import com.cephcoding.core.utils.Constants
+import com.cephcoding.features.feat_favorite.FavoriteViewModel
+import com.cephcoding.features.feat_home.HomeViewModel
+import com.cephcoding.features.feat_search.SearchViewModel
+import com.google.firebase.auth.FirebaseAuth
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.workmanager.dsl.worker
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-val networkModule = module {
 
+val appModule = module {
+    //Firebase
+    single { FirebaseAuth.getInstance() }
+
+    //Auth
+    single { GoogleAuthClient(androidContext(), get()) }
+
+    //Worker
+    worker { (context: Context, params: WorkerParameters) ->
+        RandomNewsWorker(context, params, get())
+    }
+}
+
+val coreModule = module {
+
+    // Network call
     single {
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -30,30 +46,12 @@ val networkModule = module {
             .build()
 
     }
-
     single { get<Retrofit>().create(ApiService::class.java) }
 
-}
-
-val viewModelModule = module {
-
-    viewModel { HomeViewModel(get()) }
-
-    viewModel { SearchViewModel(get()) }
-
-    viewModel { FavoriteViewModel(get()) }
-
-
-}
-
-val repositoryModule = module {
-
+    //Repository
     single { PulseRepositoryImpl(get(), get()) } bind PulseRepository::class
 
-}
-
-val databaseModule = module {
-
+    //Database
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -63,14 +61,12 @@ val databaseModule = module {
     }
 
     single { get<ArticleDatabase>().dao }
-
 }
 
-val workerModule = module {
+val featureModule = module {
+    viewModel { HomeViewModel(get()) }
 
+    viewModel { SearchViewModel(get()) }
 
-    worker { (context: Context, params: WorkerParameters) ->
-        RandomNewsWorker(context, params, get())
-    }
-
+    viewModel { FavoriteViewModel(get()) }
 }

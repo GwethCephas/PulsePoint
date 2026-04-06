@@ -26,48 +26,30 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.ceph.pulsepoint.data.worker.RandomNewsWorker
-import com.ceph.pulsepoint.presentation.authentication.GoogleAuthClient
-import com.ceph.pulsepoint.presentation.components.PulseBottomBar
-import com.ceph.pulsepoint.presentation.components.PulseTopBar
-import com.ceph.pulsepoint.presentation.navigation.NavGraphSetUp
-import com.ceph.pulsepoint.presentation.navigation.Routes
-import com.ceph.pulsepoint.ui.theme.ThePulsePointTheme
+import com.ceph.pulsepoint.navigation.NavGraphSetUp
+import com.cephcoding.core.authentication.GoogleAuthClient
+import com.cephcoding.core.domain.model.Routes
+import com.cephcoding.core.components.PulseBottomBar
+import com.cephcoding.core.components.PulseTopBar
+import com.cephcoding.core.data.worker.RandomNewsWorker
+import com.cephcoding.core.ui.theme.ThePulsePointTheme
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
 
 class MainActivity : ComponentActivity() {
 
-    private val googleAuthClient by lazy {
-        GoogleAuthClient(context = this)
-    }
+    private val googleAuthClient: GoogleAuthClient by inject()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        setBackgroundWork()
 
         setContent {
             ThePulsePointTheme {
-
-                // Work Manager setup.
-                val constraints = Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-
-                val newsPeriodicWorkRequest = PeriodicWorkRequestBuilder<RandomNewsWorker>(
-                    1, TimeUnit.HOURS
-                )
-                    .setConstraints(constraints)
-                    .setInitialDelay(10, TimeUnit.SECONDS)
-                    .build()
-
-                WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                    "news_periodic_work",
-                    ExistingPeriodicWorkPolicy.KEEP,
-                    newsPeriodicWorkRequest
-                )
 
                 //  Controlling the bottom bar visibility.
                 val scrollState = rememberLazyListState()
@@ -138,6 +120,25 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+    private fun setBackgroundWork() {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val newsPeriodicWorkRequest = PeriodicWorkRequestBuilder<RandomNewsWorker>(
+            1, TimeUnit.HOURS
+        )
+            .setConstraints(constraints)
+            .setInitialDelay(10, TimeUnit.SECONDS)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "news_periodic_work",
+            ExistingPeriodicWorkPolicy.KEEP,
+            newsPeriodicWorkRequest
+        )
     }
 
 

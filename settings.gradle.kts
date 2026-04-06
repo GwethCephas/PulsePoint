@@ -24,3 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "PulsePoint"
 include(":app")
+include(":core")
+include(":features")

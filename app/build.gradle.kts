@@ -1,11 +1,8 @@
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.jetbrainsKotlinSerialization)
-    alias(libs.plugins.gms.google.services)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.gms.google.services) // Added this
 }
 
 android {
@@ -24,10 +21,6 @@ android {
             useSupportLibrary = true
         }
 
-
-        val properties = Properties()
-        properties.load(rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "API_KEY", properties.getProperty("API_KEY"))
     }
 
     buildTypes {
@@ -47,11 +40,14 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 }
 
 dependencies {
+
+    implementation(project(":core"))
+    implementation(project(":features"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -60,6 +56,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.material)
 
     // Unit testing
     testImplementation(libs.junit)
@@ -74,47 +71,29 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Room
-    implementation(libs.bundles.room)
-    ksp(libs.androidx.room.compiler)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-
-    // Coil
-    implementation(libs.coil.compose)
-
     // Koin
     implementation(libs.bundles.koin)
 
-    //Material icons extended
-    implementation(libs.material.icons.extended)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-    //Google Fonts
-    implementation(libs.androidx.ui.text.google.fonts)
-
     // SplashScreen
     implementation(libs.androidx.core.splashscreen)
 
-    // Paging
+    //Paging
     implementation(libs.androidx.paging.compose)
-    implementation(libs.androidx.room.paging)
+
+    // Room
+    implementation(libs.bundles.room)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
     // Firebase
-    implementation(libs.play.services.auth)
     implementation(libs.firebase.auth)
 
-    // Credential Manager
-    implementation(libs.credential.manager)
-    implementation(libs.google.id.service)
-    implementation(libs.credential.service.auth)
-
-    //WorkManager
-    implementation(libs.work.manager)
 
 }
