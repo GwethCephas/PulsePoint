@@ -8,7 +8,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cephcoding.core.authentication.GoogleAuthClient
 import com.cephcoding.core.domain.model.Routes
@@ -93,7 +92,7 @@ fun NavGraphSetUp(
 
             )
         }
-        composable(Routes.Notification.route) {
+        composable(Routes.Activity.route) {
             NotificationScreen()
         }
         composable(Routes.Profile.route) {
