@@ -1,13 +1,16 @@
 package com.cephcoding.features.feat_auth
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -57,12 +60,13 @@ fun SignUpScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Sign up",
+            text = "Create account",
             modifier = Modifier.padding(20.dp),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.SemiBold
@@ -178,6 +182,8 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.padding(8.dp))
 
         Button(
+            modifier = Modifier.fillMaxWidth(0.6f),
+            shape = MaterialTheme.shapes.medium,
             onClick = {
                 if (password == confirmPassword && username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                     scope.launch {
@@ -192,9 +198,16 @@ fun SignUpScreen(
                     navController.navigate(Routes.Home.route)
                 }
 
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
         ) {
-            Text(text = "Sign Up")
+            Text(
+                text = "Create account",
+                style = MaterialTheme.typography.bodyMedium,
+            )
         }
 
     }
