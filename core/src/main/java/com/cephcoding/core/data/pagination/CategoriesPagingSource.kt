@@ -38,7 +38,7 @@ class CategoriesPagingSource(
             )
 
         } catch (e: Exception) {
-            Log.e("CategoriesPagingSource", "Error: ${e.message}", e)
+            Log.e("CategoriesPagingSource", "Error loading data: ${e.message}")
             LoadResult.Error(e)
         }
     }
