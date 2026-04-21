@@ -3,10 +3,19 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrainsKotlinSerialization)
-    alias(libs.plugins.gms.google.services)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
+val properties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { properties.load(it) }
+}
+
+val apiKey = properties.getProperty("API_KEY") ?: System.getenv("MY_API_KEY") ?: ""
+val webClient = properties.getProperty("WEB_CLIENT") ?: System.getenv("WEB_CLIENT") ?: ""
+
 android {
     namespace = "com.ceph.core"
     compileSdk = 36
@@ -15,18 +24,37 @@ android {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val properties = Properties()
-        properties.load(rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "API_KEY", properties.getProperty("API_KEY"))
-        buildConfigField("String", "WEB_CLIENT", properties.getProperty("WEB_CLIENT"))
+        buildConfigField("String", "API_KEY", apiKey)
+        buildConfigField("String", "WEB_CLIENT", webClient)
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
+    testOptions {
+        unitTests.all {
+            (this as? Test)?.apply {
+                maxHeapSize = "2048m"
+            }
+        }
+    }
 }
 
 dependencies {
+    // Unit Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.turbine)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.ktx)
@@ -66,7 +94,6 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
-
 
 
 }
