@@ -10,6 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      MY_API_KEY: ${{ secrets.MY_API_KEY }}
+      WEB_CLIENT: ${{ secrets.WEB_CLIENT }}
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout code
