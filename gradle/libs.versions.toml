@@ -8,10 +8,13 @@ activityCompose = "1.13.0"
 composeBom = "2026.03.01"
 
 junit = "4.13.2"
+androidx-test-rules = "1.7.0"
+androidx-test-runner = "1.7.0"
 truth = "1.4.5"
 mockk = "1.14.9"
 kotlinxCoroutinesTest = "1.10.2"
 espressoCore = "3.7.0"
+turbine = "1.2.1"
 uiTestManifest = "1.10.6"
 uiTestJunit4 = "1.10.6"
 junitVersion = "1.3.0"
@@ -43,6 +46,11 @@ workManager = "2.11.2"
 
 
 [libraries]
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
+androidx-rules = { group = "androidx.test", name = "rules", version.ref = "androidx-test-rules" }
+androidx-paging-testing = { group = "androidx.paging", name = "paging-testing", version.ref = "pagingVersion" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 work-manager = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager"}
