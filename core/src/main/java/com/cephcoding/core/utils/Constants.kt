@@ -6,12 +6,11 @@ import com.ceph.core.BuildConfig
 object Constants {
 
 
-
     const val BASE_URL = "https://newsapi.org"
-    const val API_KEY = BuildConfig.API_KEY
+    val API_KEY = BuildConfig.API_KEY
 
-    const val WEB_CLIENT = BuildConfig.WEB_CLIENT
-    const val PULSE_CHANNEL_ID ="pulse_channel_id"
+    val WEB_CLIENT = BuildConfig.WEB_CLIENT
+    const val PULSE_CHANNEL_ID = "pulse_channel_id"
     const val PULSE_CHANNEL_NAME = "pulse_channel"
     const val ALL = "all"
     const val BUSINESS = "business"
