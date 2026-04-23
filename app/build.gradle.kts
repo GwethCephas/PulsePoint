@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.gms.google.services) // Added this
+    alias(libs.plugins.gms.google.services)
 }
 
 android {
@@ -58,18 +58,12 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material)
 
-    // Unit testing
-    testImplementation(libs.junit)
-    testImplementation(libs.truth)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-
-    // Android instrumentation testing
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // For checking if Koin modules load correctly
+    testImplementation(libs.junit)
 
     // Koin
     implementation(libs.bundles.koin)
