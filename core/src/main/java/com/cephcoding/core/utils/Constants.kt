@@ -7,9 +7,9 @@ object Constants {
 
 
     const val BASE_URL = "https://newsapi.org"
-    val API_KEY = BuildConfig.API_KEY
+    const val API_KEY = BuildConfig.API_KEY
 
-    val WEB_CLIENT = BuildConfig.WEB_CLIENT
+    const val WEB_CLIENT = BuildConfig.WEB_CLIENT
     const val PULSE_CHANNEL_ID = "pulse_channel_id"
     const val PULSE_CHANNEL_NAME = "pulse_channel"
     const val ALL = "all"
