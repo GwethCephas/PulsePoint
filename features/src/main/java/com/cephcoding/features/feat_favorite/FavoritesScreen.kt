@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +28,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.ceph.features.R
 import com.cephcoding.core.components.ArticleItem
 import com.cephcoding.core.domain.model.Article
+import com.cephcoding.core.ui.theme.primaryText
 
 
 @Composable
@@ -38,10 +40,19 @@ fun FavoriteScreen(
 ) {
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.statusBars)
     ) {
+        Text(
+            text = "Favorite News",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            style = MaterialTheme.typography.displaySmall,
+            fontWeight = FontWeight.SemiBold,
+            color = primaryText
+        )
 
 
         if (favoriteArticles.itemCount == 0) {
@@ -56,8 +67,8 @@ fun FavoriteScreen(
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .windowInsetsPadding(WindowInsets.statusBars),
+                    .weight(1f)
+                    .padding(horizontal = 10.dp),
                 contentPadding = PaddingValues(5.dp),
                 state = listState,
                 verticalArrangement = Arrangement.spacedBy(5.dp),

@@ -1,5 +1,6 @@
 package com.cephcoding.features.feat_home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,12 +15,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cephcoding.core.components.ArticleItem
+import com.cephcoding.core.components.BreakingNewsItem
 import com.cephcoding.core.domain.model.Article
+import com.cephcoding.core.ui.theme.backgroundColor
+import com.cephcoding.core.ui.theme.iconBackgroundColor
+import com.cephcoding.core.ui.theme.primaryText
+import com.cephcoding.core.ui.theme.secondaryText
 import com.cephcoding.core.utils.Constants.ALL
 import com.cephcoding.core.utils.Constants.BUSINESS
 import com.cephcoding.core.utils.Constants.ENTERTAINMENT
@@ -45,23 +51,27 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
+    modifier : Modifier = Modifier,
     listState: LazyListState,
     favoriteArticlesUrls: List<String>,
     onToggleStatus: (Article) -> Unit,
     paddingValues: PaddingValues,
     viewModel: HomeViewModel
 ) {
+    val scope = rememberCoroutineScope()
 
     val categories = listOf(
         ALL, BUSINESS, ENTERTAINMENT, GENERAL, HEALTH, SCIENCE, SPORTS, TECHNOLOGY
     )
     val articles = viewModel.articles.collectAsLazyPagingItems()
+    val breakingNews = viewModel.breakingNews.collectAsState()
+
     val selectedCategories = viewModel.categoryNews.collectAsLazyPagingItems()
     val selectedCategoriesLoadState = selectedCategories.loadState.refresh
+
     val loadState = articles.loadState.refresh
     var selectedIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState { categories.size }
-    val scope = rememberCoroutineScope()
 
 
     LaunchedEffect(selectedIndex) {
@@ -73,10 +83,29 @@ fun HomeScreen(
         }
     }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
+            .background(backgroundColor)
             .padding(top = paddingValues.calculateTopPadding())
     ) {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(breakingNews.value.size) { index ->
+                val breakingNewsArticle = breakingNews.value[index]
+                BreakingNewsItem(
+                    modifier = modifier,
+                    article = breakingNewsArticle,
+                    isFavorite = favoriteArticlesUrls.contains(
+                        breakingNewsArticle.url
+                    ),
+                    onFavoriteClick = {}
+                )
+
+            }
+        }
 
         LazyRow(
             modifier = Modifier
@@ -96,11 +125,14 @@ fun HomeScreen(
 
                     },
                     label = {
-                        Text(text = categories[it])
+                        Text(
+                            text = categories[it],
+                            color = primaryText
+                        )
                     },
                     colors = SuggestionChipDefaults.suggestionChipColors(
-                        containerColor = if (selectedIndex == it) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.surfaceVariant
+                        containerColor = if (selectedIndex == it) iconBackgroundColor
+                        else secondaryText
                     )
                 )
             }
@@ -122,6 +154,7 @@ fun HomeScreen(
                             CircularProgressIndicator()
                         }
                     }
+
                     selectedCategoriesLoadState is LoadState.Error -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -152,10 +185,10 @@ fun HomeScreen(
                     selectedIndex == 0 -> {
                         LazyColumn(
                             modifier = Modifier
-                                .fillMaxSize(),
-                            contentPadding = PaddingValues(5.dp),
+                                .fillMaxSize()
+                                .padding(10.dp),
                             state = listState,
-                            verticalArrangement = Arrangement.spacedBy(5.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             items(articles.itemSnapshotList.size) { index ->
@@ -177,7 +210,10 @@ fun HomeScreen(
                     else -> {
                         if (selectedCategories.itemSnapshotList.isNotEmpty()) {
                             LazyColumn(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(10.dp),
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
                                 items(selectedCategories.itemSnapshotList.size) { index ->
                                     selectedCategories[index]?.let { article ->

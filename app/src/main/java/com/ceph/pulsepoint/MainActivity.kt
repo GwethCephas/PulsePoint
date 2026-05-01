@@ -2,8 +2,10 @@ package com.ceph.pulsepoint
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
@@ -31,11 +33,12 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.ceph.pulsepoint.navigation.NavGraphSetUp
 import com.cephcoding.core.authentication.GoogleAuthClient
-import com.cephcoding.core.domain.model.Routes
 import com.cephcoding.core.components.PulseBottomBar
 import com.cephcoding.core.components.PulseTopBar
 import com.cephcoding.core.data.worker.RandomNewsWorker
+import com.cephcoding.core.domain.model.Routes
 import com.cephcoding.core.ui.theme.ThePulsePointTheme
+import com.cephcoding.core.ui.theme.backgroundColor
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
@@ -49,24 +52,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setBackgroundWork()
 
         setContent {
-            ThePulsePointTheme {
+            ThePulsePointTheme{
 
-                //  Controlling the bottom bar visibility.
                 val scrollState = rememberLazyListState()
-                var isBottomBarVisible by remember { mutableStateOf(true) }
-                var lastScrollIndex by remember { mutableIntStateOf(0) }
-
-                LaunchedEffect(key1 = remember { derivedStateOf { scrollState.firstVisibleItemIndex } }) {
-                    if (scrollState.firstVisibleItemIndex < lastScrollIndex) {
-                        isBottomBarVisible = true
-                    } else if (scrollState.firstVisibleItemIndex > lastScrollIndex) {
-                        isBottomBarVisible = false
-                    }
-                    lastScrollIndex = scrollState.firstVisibleItemIndex
-                }
 
                 // Navigation setup.
                 val navController = rememberNavController()
@@ -96,8 +88,7 @@ class MainActivity : ComponentActivity() {
 
                         if (currentRoute != Routes.SignIn.route && currentRoute != Routes.SignUp.route) {
                             PulseBottomBar(
-                                navController = navController,
-                                isVisible = isBottomBarVisible
+                                navController = navController
                             )
                         }
                     }

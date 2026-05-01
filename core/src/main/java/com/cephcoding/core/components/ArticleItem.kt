@@ -21,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -42,10 +41,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import androidx.core.net.toUri
+import coil.compose.AsyncImage
 import com.ceph.core.R
 import com.cephcoding.core.domain.model.Article
+import com.cephcoding.core.ui.theme.primaryText
+import com.cephcoding.core.ui.theme.secondaryText
+import com.cephcoding.core.ui.theme.tertiaryCardColor
 
 
 @Composable
@@ -76,7 +78,7 @@ fun ArticleItem(
             pressedElevation = 10.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = tertiaryCardColor
         )
 
     ) {
@@ -84,7 +86,7 @@ fun ArticleItem(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(5.dp),
+                .padding(10.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -92,41 +94,49 @@ fun ArticleItem(
                 Box(
                     modifier = Modifier
                         .width(150.dp)
-                        .height(100.dp),
+                        .height(120.dp)
+                        .clip(RoundedCornerShape(15.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_image_not_supported_24),
                         contentDescription = "image",
                         modifier = Modifier.padding(5.dp),
-                        tint = Color.LightGray
+                        tint = secondaryText
                     )
                 }
 
             } else {
-                AsyncImage(
-                    model = article.urlToImage,
-                    contentDescription = "image",
-                    contentScale = ContentScale.Crop,
+                Box(
                     modifier = Modifier
                         .width(150.dp)
-                        .height(100.dp)
-                )
+                        .height(120.dp)
+                        .clip(RoundedCornerShape(15.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        model = article.urlToImage,
+                        contentDescription = "image",
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
 
 
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 10.dp, start = 10.dp),
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(2.dp)
+                verticalArrangement = Arrangement.Center
             ) {
 
                 Text(
                     text = article.title,
-                    fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp,
                     maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = primaryText
                 )
 
                 FavoriteButton(

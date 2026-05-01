@@ -1,5 +1,6 @@
 package com.cephcoding.features.feat_search
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,7 +29,9 @@ import androidx.paging.compose.LazyPagingItems
 import com.ceph.features.R
 import com.cephcoding.core.components.ArticleItem
 import com.cephcoding.core.domain.model.Article
-import com.cephcoding.core.ui.theme.surfaceVariantLight
+import com.cephcoding.core.ui.theme.backgroundColor
+import com.cephcoding.core.ui.theme.primaryText
+import com.cephcoding.core.ui.theme.secondaryText
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +50,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(backgroundColor)
             .padding(5.dp)
     ) {
         SearchBar(
@@ -55,7 +58,7 @@ fun SearchScreen(
                 .fillMaxWidth()
                 .padding(5.dp),
             colors = SearchBarDefaults.colors(
-                containerColor = surfaceVariantLight
+                containerColor = secondaryText
             ),
             tonalElevation = SearchBarDefaults.TonalElevation,
             shadowElevation = SearchBarDefaults.ShadowElevation,
@@ -93,7 +96,7 @@ fun SearchScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_data),
                     contentDescription = "empty",
-                    tint = Color.LightGray
+                    tint = secondaryText
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -101,7 +104,8 @@ fun SearchScreen(
                     text = "Search for news",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = primaryText
                 )
 
             }

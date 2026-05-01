@@ -1,5 +1,6 @@
 package com.cephcoding.features.feat_home
 
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 
 class HomeViewModel(
     private val repository: PulseRepository
@@ -23,9 +29,12 @@ class HomeViewModel(
     private val _categoryNews = MutableStateFlow<PagingData<Article>>(PagingData.empty())
     val categoryNews = _categoryNews.asStateFlow()
 
-    init {
+    private val _breakingNews = MutableStateFlow<List<Article>>(emptyList())
+    val breakingNews = _breakingNews.asStateFlow()
 
+    init {
         getNewsHeadlines()
+        getBreakingNews()
     }
 
     fun getNewsHeadlines() {
@@ -34,6 +43,27 @@ class HomeViewModel(
                 _articles.value = it
             }
 
+        }
+    }
+
+    fun getBreakingNews() {
+        viewModelScope.launch {
+
+            val yesterday = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDate.now().minusDays(1).toString()
+            } else {
+                val cal = Calendar.getInstance()
+                cal.add(Calendar.DATE, -1)
+                SimpleDateFormat("yyyy-MM-dd", Locale.US).format(cal.time)
+            }
+
+
+            repository.getTodayNews(
+                from = yesterday,
+                to = yesterday
+            ).collect { breakingNews ->
+                _breakingNews.value = breakingNews
+            }
         }
     }
 
