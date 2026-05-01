@@ -201,7 +201,7 @@ class PulseRepositoryTest {
         val mockArticles = articles.map { it.toArticle() }
         val newsResponse = NewsResponse("ok", 3, mockArticles)
 
-        coEvery { apiService.getTodayNews(from, to) } returns newsResponse
+        coEvery { apiService.getTodayNews(from = from, to = to) } returns newsResponse
 
         val flow = repository.getTodayNews(from, to)
 
@@ -209,7 +209,7 @@ class PulseRepositoryTest {
 
         assertEquals(mockArticles, result)
 
-        coVerify(exactly = 1) { apiService.getTodayNews(from, to) }
+        coVerify(exactly = 1) { apiService.getTodayNews(from = from, to = to) }
     }
 
 }
