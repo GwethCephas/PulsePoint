@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 
 class PulseRepositoryImpl(
     private val apiService: ApiService,
-    private val articleDatabase: ArticleDatabase
+    articleDatabase: ArticleDatabase
 ) : PulseRepository {
 
     private val favoritesDao = articleDatabase.dao
@@ -85,12 +85,15 @@ class PulseRepositoryImpl(
         }
     }
 
-    override fun getTodayNews(from: String, to:String): Flow<List<Article>> {
+    override fun getTodayNews(from: String, to: String): Flow<List<Article>> {
         return flow {
             try {
-                val todayNews = apiService.getTodayNews(from, to)
+                val todayNews = apiService.getTodayNews(from = from, to = to)
                 emit(todayNews.articles)
-                Log.d("PulseRepositoryImpl", "To day's news fetched successfully : ${todayNews.articles}")
+                Log.d(
+                    "PulseRepositoryImpl",
+                    "Today's news fetched successfully : ${todayNews.articles}"
+                )
             } catch (e: Exception) {
                 Log.e("PulseRepositoryImpl", "Error fetching today's news: ${e.message}")
             }
