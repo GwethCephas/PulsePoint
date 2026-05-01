@@ -12,7 +12,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -24,9 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ceph.core.R
 import com.cephcoding.core.domain.model.Routes
-import com.cephcoding.core.ui.theme.primaryContainerDarkMediumContrast
-import com.cephcoding.core.ui.theme.primaryContainerLightMediumContrast
-import com.cephcoding.core.ui.theme.surfaceBrightLight
+import com.cephcoding.core.ui.theme.backgroundColor
+import com.cephcoding.core.ui.theme.iconBackgroundColor
+import com.cephcoding.core.ui.theme.primaryText
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,13 +38,7 @@ fun PulseTopBar(
     TopAppBar(
         modifier = Modifier
             .background(
-                Brush.linearGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.inversePrimary,
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.inversePrimary
-                    )
-                )
+                color = backgroundColor
             ),
         scrollBehavior = scrollBehavior,
         title = {
@@ -54,17 +47,18 @@ fun PulseTopBar(
                 text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            color = surfaceBrightLight,
-                            fontSize = 22.sp,
+                            color = primaryText,
+                            fontSize = MaterialTheme.typography.displaySmall.fontSize,
                             fontWeight = FontWeight.SemiBold
                         )
                     ) {
                         append("Pulse")
                     }
+                    append(" ")
                     withStyle(
                         style = SpanStyle(
-                            color = MaterialTheme.colorScheme.secondaryContainer,
-                            fontSize = 22.sp,
+                            color = iconBackgroundColor,
+                            fontSize = MaterialTheme.typography.displaySmall.fontSize,
                             fontWeight = FontWeight.SemiBold
                         )
                     ) {
@@ -84,7 +78,7 @@ fun PulseTopBar(
                    modifier = Modifier.size(24.dp),
                    painter = painterResource(R.drawable.search),
                    contentDescription = "Search",
-                   tint = Color.White
+                   tint = primaryText
                )
             }
         },
