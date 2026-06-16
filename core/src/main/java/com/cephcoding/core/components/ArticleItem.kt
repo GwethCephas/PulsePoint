@@ -3,6 +3,8 @@ package com.cephcoding.core.components
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -71,7 +73,14 @@ fun ArticleItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(2.dp)
-            .clip(RoundedCornerShape(5.dp))
+            .border(
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = Color.White.copy(alpha = 0.3f)
+                ),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .clip(RoundedCornerShape(10.dp))
             .clickable { isBottomSheetVisible = !isBottomSheetVisible },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp,
