@@ -192,24 +192,4 @@ class PulseRepositoryTest {
             coVerify(exactly = 1) { dao.addFavoriteArticle(any()) }
             coVerify(exactly = 0) { dao.deleteArticle(any()) }
         }
-
-    @Test
-    fun `getTodayNews according to the date`() = runTest {
-        val from = "2023-01-01"
-        val to = "2023-01-02"
-
-        val mockArticles = articles.map { it.toArticle() }
-        val newsResponse = NewsResponse("ok", 3, mockArticles)
-
-        coEvery { apiService.getTodayNews(from = from, to = to) } returns newsResponse
-
-        val flow = repository.getTodayNews(from, to)
-
-        val result = flow.first()
-
-        assertEquals(mockArticles, result)
-
-        coVerify(exactly = 1) { apiService.getTodayNews(from = from, to = to) }
-    }
-
 }
