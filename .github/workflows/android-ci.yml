@@ -35,7 +35,7 @@ jobs:
 
 
       - name: Run Lint
-        run: ./gradlew lintDebug
+        run: ./gradlew lintDebug --stacktrace --debug
 
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
