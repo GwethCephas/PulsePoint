@@ -2,10 +2,8 @@ package com.ceph.pulsepoint
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
@@ -13,35 +11,22 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.ceph.pulsepoint.navigation.NavGraphSetUp
 import com.cephcoding.core.authentication.GoogleAuthClient
 import com.cephcoding.core.components.PulseBottomBar
 import com.cephcoding.core.components.PulseTopBar
-import com.cephcoding.core.data.worker.RandomNewsWorker
 import com.cephcoding.core.domain.model.Routes
 import com.cephcoding.core.ui.theme.ThePulsePointTheme
-import com.cephcoding.core.ui.theme.backgroundColor
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : ComponentActivity() {
@@ -53,8 +38,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        setBackgroundWork()
-
         setContent {
             ThePulsePointTheme{
 
@@ -65,20 +48,15 @@ class MainActivity : ComponentActivity() {
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
 
-                //TopBar scroll behaviour.
-                val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
                 var searchQuery by remember { mutableStateOf("") }
 
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.navigationBars)
-                        .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+                        .windowInsetsPadding(WindowInsets.navigationBars),
                     topBar = {
                         if (currentRoute == Routes.Home.route) {
                             PulseTopBar(
-                                scrollBehavior = topAppBarScrollBehavior,
                                 navController = navController
                             )
                         }
@@ -116,25 +94,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    private fun setBackgroundWork() {
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val newsPeriodicWorkRequest = PeriodicWorkRequestBuilder<RandomNewsWorker>(
-            1, TimeUnit.HOURS
-        )
-            .setConstraints(constraints)
-            .setInitialDelay(10, TimeUnit.SECONDS)
-            .build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "news_periodic_work",
-            ExistingPeriodicWorkPolicy.KEEP,
-            newsPeriodicWorkRequest
-        )
-    }
-
 
 }

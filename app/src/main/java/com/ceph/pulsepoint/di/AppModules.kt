@@ -1,13 +1,10 @@
 package com.ceph.pulsepoint.di
 
-import android.content.Context
 import androidx.room.Room
-import androidx.work.WorkerParameters
 import com.cephcoding.core.authentication.GoogleAuthClient
 import com.cephcoding.core.data.local.ArticleDatabase
 import com.cephcoding.core.data.remote.ApiService
 import com.cephcoding.core.data.repository.PulseRepositoryImpl
-import com.cephcoding.core.data.worker.RandomNewsWorker
 import com.cephcoding.core.domain.repository.PulseRepository
 import com.cephcoding.core.utils.Constants
 import com.cephcoding.features.feat_favorite.FavoriteViewModel
@@ -15,7 +12,6 @@ import com.cephcoding.features.feat_home.HomeViewModel
 import com.cephcoding.features.feat_search.SearchViewModel
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -30,10 +26,6 @@ val appModule = module {
     //Auth
     single { GoogleAuthClient(androidContext(), get()) }
 
-    //Worker
-    worker { (context: Context, params: WorkerParameters) ->
-        RandomNewsWorker(context, params, get())
-    }
 }
 
 val coreModule = module {

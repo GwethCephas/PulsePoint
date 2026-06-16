@@ -92,9 +92,6 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-    // Worker
-    implementation(libs.work.manager)
-
     // Navigation
     implementation(libs.androidx.navigation.compose)
 

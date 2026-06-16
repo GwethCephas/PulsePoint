@@ -16,7 +16,5 @@ interface PulseRepository {
 
     fun getFavoriteArticlesUrls(): Flow<List<String>>
 
-    fun getTodayNews(from: String, to: String): Flow<List<Article>>
-
     suspend fun toggleFavoriteStatus(article: Article)
 }

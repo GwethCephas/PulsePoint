@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ceph.core.R
 import com.cephcoding.core.domain.model.Routes
@@ -31,7 +29,6 @@ import com.cephcoding.core.ui.theme.primaryText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PulseTopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
     navController: NavHostController
 ) {
 
@@ -40,7 +37,6 @@ fun PulseTopBar(
             .background(
                 color = backgroundColor
             ),
-        scrollBehavior = scrollBehavior,
         title = {
 
             Text(

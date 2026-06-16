@@ -1,6 +1,5 @@
 package com.cephcoding.core.data.repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -15,7 +14,6 @@ import com.cephcoding.core.data.remote.ApiService
 import com.cephcoding.core.domain.model.Article
 import com.cephcoding.core.domain.repository.PulseRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class PulseRepositoryImpl(
@@ -82,21 +80,6 @@ class PulseRepositoryImpl(
             favoritesDao.deleteArticle(favoriteEntity)
         } else {
             favoritesDao.addFavoriteArticle(favoriteEntity)
-        }
-    }
-
-    override fun getTodayNews(from: String, to: String): Flow<List<Article>> {
-        return flow {
-            try {
-                val todayNews = apiService.getTodayNews(from = from, to = to)
-                emit(todayNews.articles)
-                Log.d(
-                    "PulseRepositoryImpl",
-                    "Today's news fetched successfully : ${todayNews.articles}"
-                )
-            } catch (e: Exception) {
-                Log.e("PulseRepositoryImpl", "Error fetching today's news: ${e.message}")
-            }
         }
     }
 }

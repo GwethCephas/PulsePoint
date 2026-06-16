@@ -32,12 +32,5 @@ interface ApiService {
         @Query("pageSize") pageSize: Int
     ): NewsResponse
 
-    @GET("v2/everything")
-    suspend fun getTodayNews(
-        @Query("from") from: String,
-        @Query("to") to: String,
-        @Query("sortBy") sortBy: String = "publishedAt",
-        @Query("apiKey") apiKey: String = API_KEY,
-    ): NewsResponse
 
 }

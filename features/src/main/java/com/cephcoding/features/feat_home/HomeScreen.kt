@@ -20,7 +20,6 @@ import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cephcoding.core.components.ArticleItem
-import com.cephcoding.core.components.BreakingNewsItem
 import com.cephcoding.core.domain.model.Article
 import com.cephcoding.core.ui.theme.backgroundColor
 import com.cephcoding.core.ui.theme.iconBackgroundColor
@@ -64,7 +62,6 @@ fun HomeScreen(
         ALL, BUSINESS, ENTERTAINMENT, GENERAL, HEALTH, SCIENCE, SPORTS, TECHNOLOGY
     )
     val articles = viewModel.articles.collectAsLazyPagingItems()
-    val breakingNews = viewModel.breakingNews.collectAsState()
 
     val selectedCategories = viewModel.categoryNews.collectAsLazyPagingItems()
     val selectedCategoriesLoadState = selectedCategories.loadState.refresh
@@ -88,25 +85,6 @@ fun HomeScreen(
             .background(backgroundColor)
             .padding(top = paddingValues.calculateTopPadding())
     ) {
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items(breakingNews.value.size) { index ->
-                val breakingNewsArticle = breakingNews.value[index]
-                BreakingNewsItem(
-                    modifier = modifier,
-                    article = breakingNewsArticle,
-                    isFavorite = favoriteArticlesUrls.contains(
-                        breakingNewsArticle.url
-                    ),
-                    onFavoriteClick = {}
-                )
-
-            }
-        }
-
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
