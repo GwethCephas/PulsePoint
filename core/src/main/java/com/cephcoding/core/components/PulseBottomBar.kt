@@ -78,7 +78,7 @@ fun PulseBottomBar(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(0.9f)
-                        .padding(4.dp)
+                        .padding(7.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(if (isSelected) iconBackgroundColor else Color.Transparent)
                         .clickable {
