@@ -4,22 +4,12 @@ Pulse Point is a sleek, modern Android news application designed to keep you upd
 
 ## 📱 App Screenshots
 
-<table width="100%" style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td width="25%" style="border: none; padding: 4px;">
-      <img src="screenshots/home_screen.jpeg" alt="Home Screen" width="100%" style="border-radius: 8px;" />
-    </td>
-    <td width="25%" style="border: none; padding: 4px;">
-      <img src="screenshots/favorite_screen.jpeg" alt="Favorite Screen" width="100%" style="border-radius: 8px;" />
-    </td>
-    <td width="25%" style="border: none; padding: 4px;">
-      <img src="screenshots/search_screen.jpeg" alt="Search Screen" width="100%" style="border-radius: 8px;" />
-    </td>
-    <td width="25%" style="border: none; padding: 4px;">
-      <img src="screenshots/profile_screen.jpeg" alt="Profile Screen" width="100%" style="border-radius: 8px;" />
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="screenshots/home_screen.jpeg" width="200" alt="Home Screen" />
+  <img src="screenshots/favorite_screen.jpeg" width="200" alt="Favorite Screen" />
+  <img src="screenshots/search_screen.jpeg" width="200" alt="Search Screen" />
+  <img src="screenshots/profile_screen.jpeg" width="200" alt="Profile Screen" />
+</p>
 
 ---
 
